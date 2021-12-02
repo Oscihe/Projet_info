@@ -6,7 +6,7 @@
 //Voir comment importer d'autres fichiers c dans celui là
 //#include "barrage.c"
 #include "pente1.c"
-#include "Water_travel.c"
+//#include "Water_travel.c"
 #include "time.c"
 //Ce fichier contient la fonction main pour tout notre projet
 //Nous importons les autres fichiers c (contenant toutes les fonctions, structures, ...)
@@ -22,13 +22,13 @@ struct GpsPoint {
 struct Goutte{
   double x;
   double y;
-  double time_tot;
+  //double time_tot;
 };
 
 //caractéristiques de chaque case
 struct Grille {
- int lac;
- int riviere;
+ int lac;//est-ce vraiment utile de faire mettre une var lac = 0 ou 1 ??? (car ce qui nous intéresse est catch)
+ int riviere;//à voir comment on fait pour les rivières ; absorption dans sol ; si/quand ça gèle, ...
  int catch;
  double slope_x;
  double slope_y;
@@ -43,9 +43,10 @@ struct Gpspoint
 
 
 
-gv[]) {
+//gv[]) {
+//qu'est-ce que ça veut dire ce qui est fait ici ?!
   for (int i=0;i<36*44;i++){
     while (travel(i,i,point))
   }
   return 0;
-}
+//}
