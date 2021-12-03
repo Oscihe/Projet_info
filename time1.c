@@ -4,6 +4,9 @@
 #include <stdbool.h>
 #include <math.h>
 
+//je refait la fct dans un nouveau fichier
+
+
 //ATTENTION : s'assurer que le malloc est sous la bonne forme => que les altitudes et coordonnées sont dans les angles des carrés ; cf aussi ex terrain 
 
 
@@ -89,7 +92,7 @@ double coord_y_finale = grilles[i].longitude + 100 + py;
 //Exemple pour appeler la fct : travel(grilles[i], goutte[i])
 //Attention : la struct "grilles" (=> la case initiale) reste tjr la même => ne pas la modifier tant qu'on a tjr la même goutte
 
-bool travel(struct Grille * grilles, struct Goutte * gouttes){
+bool travel(struct Carre grilles, struct Goutte * gouttes){
 	//Si la goutte arrive à moins de 100m d'un bord, on arrête la fonction
 	//Nous avons défini notre zone d'étude de façon a n'avoir que des pentes qui "sortent" de la zone lorsqu'on arrive sur le bord
 	//Donc une goutte ne va pas longer le bord de la zone
@@ -104,18 +107,18 @@ bool travel(struct Grille * grilles, struct Goutte * gouttes){
 	//"normaliser" les pentes en x et y : la pente la plus grande est amenée à 100 et la plus petite est proportionnelle à la grande
 	double px = 0;
 	double py = 0;
-	if(grilles.slope_x==0 && grilles.slope_y==0){
+	if(grilles[i].slope_x==0 && grilles[i].slope_y==0){
 		double px = 0;
 		double py = 0;
 		//Dans ce cas, la goutte de bougera pas
-	} else if(grilles.slope_x <=0 && grilles.slope_y >=0){
-		if(grilles.slope_x ==0 && grilles.slope_y >0){
+	} else if(grilles[i].slope_x <=0 && grilles[i].slope_y >=0){
+		if(grilles[i].slope_x ==0 && grilles[i].slope_y >0){
 			double px = 0;
 			double py = 100;
-		} else if(grilles.slope_x<0 && grilles.slope_y==0){
+		} else if(grilles[i].slope_x<0 && grilles[i].slope_y==0){
 			double px = -100;
 			double py = 0;
-		} else if(fabs(grilles.slope_x) > grilles.slope_y){
+		} else if(fabs(grilles[i].slope_x) > grilles[i].slope_y){
 			double px = -100;//comme ça on est exactement sur le bord d'une case ; est-ce qu'on écrit bien comme ça les nbr négatifs ?!
 			double py = fabs((100*grilles.slope_y)/grilles.slope_x);
 		} else{
@@ -123,33 +126,33 @@ bool travel(struct Grille * grilles, struct Goutte * gouttes){
 			double px = (100*grilles.slope_x)/grilles.slope_y;//px est déjà négatif, car une slope est >0 et l'autre <0 => la division est <0
 			//mêmes remarques pour les autres cas
 		}
-	} else if(grilles.slope_y <=0 && grilles.slope_x >=0){
-		if(grilles.slope_x ==0 && grilles.slope_y<0){
+	} else if(grilles[i].slope_y <=0 && grilles[i].slope_x >=0){
+		if(grilles[i].slope_x ==0 && grilles[i].slope_y<0){
 			double px = 0;
 			double py = -100;
-		} else if(grilles.slope_x>0 && grilles.slope_y==0){
+		} else if(grilles[i].slope_x>0 && grilles[i].slope_y==0){
 			double px = 100;
 			double py = 0;
-		} else if(grilles.slope_x > fabs(grilles.slope_y)){
+		} else if(grilles[i].slope_x > fabs(grilles[i].slope_y)){
 			double px = 100;
-			double py = (100*grilles.slope_y)/grilles.slope_x;
+			double py = (100*grilles[i].slope_y)/grilles[i].slope_x;
 		} else{
 			double py = -100;
-			double px = fabs((100*grilles.slope_x)/grilles.slope_y);
+			double px = fabs((100*grilles[i].slope_x)/grilles[i].slope_y);
 		}
-	} else if(grilles.slope_x<0 && grilles.slope_y<0){
-		if(grilles.slope_x ==0 && grilles.slope_y<0){
+	} else if(grilles[i].slope_x<0 && grilles[i].slope_y<0){
+		if(grilles[i].slope_x ==0 && grilles[i].slope_y<0){
 			double px = 0;
 			double py = -100;
-		} else if(grilles.slope_x<0 && grilles.slope_y==0){
+		} else if(grilles[i].slope_x<0 && grilles[i].slope_y==0){
 			double px = -100;
 			double py = 0;
-		} else if(fabs(grilles.slope_x) > fabs(grilles.slope_y)){
+		} else if(fabs(grilles[i].slope_x) > fabs(grilles[i].slope_y)){
 			double px = -100;
-			double py = -((100*grilles.slope_y)/grilles.slope_x);
+			double py = -((100*grilles[i].slope_y)/grilles[i].slope_x);
 		} else{
 			double py = -100;
-			double px =-((100*grilles.slope_x)/grilles.slope_y);
+			double px =-((100*grilles[i].slope_x)/grilles[i].slope_y);
 		}
 	} else if(grilles.slope_x>0 && grilles.slope_y>0){
 		if(grilles.slope_x ==0 && grilles.slope_y>0){
@@ -193,19 +196,26 @@ bool travel(struct Grille * grilles, struct Goutte * gouttes){
 	//comme ça c'est uniforme (partout la même échelle donc on peut comparer)
 	//ou calculer les pente avec les angles ?! ce serait peut être mieux, car tout est entre 0 et +/-90 degrés ?!
 	//j'ai calculé les pentes avec les angles
-	gouttes->x = goutte.latitude + 100 + px;//+100, car la goutte part depuis le milieu de la case
-	gouttes->y = goutte.longitude + 100 + py;
+	
+	//mettre des conditions if/else pour voir dans quelle case la goutte va
+	double new_x = goutte.latitude + px;
+	double new_y = goutte.longitude + py;
+	if(grilles[i]
+	
+	
+	//gouttes->x = goutte.latitude + 100 + px;//+100, car la goutte part depuis le milieu de la case
+	//gouttes->y = goutte.longitude + 100 + py;
+	
 	//if(grilles.slope_x+(200/3) <= cord_x_finale <= grilles[i+1].slope_x - (200/3)){if(coord_y_finale == grilles[i].slope_y){goutte.x = grilles[i-37].latitude + 100 et goutte.y = grilles[i-37].longitude +100}}
 	grilles.time += 2*time1;
 	//Attention : avant de lancer la fct => initialiser toutes les grilles.time à 0
 	
-	//utiliser la fct lacDix qui dit si un point (de coord x et y) est dans le lac
+	//utiliser la fct inLac qui dit si un point (de coord x et y) est dans le lac
 	//=> if gouttes.x et gouttes.y sont dans le lac => catch de la case de départ = 1
 	if(inLac(gouttes.x, gouttes.y)){
 		grilles.catch = 1;
+		return false;
 	}
-	//à terminer
-	return ...;
 }
 
 
