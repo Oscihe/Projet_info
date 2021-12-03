@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <math.h>
-
+//#include "projet.c"
 //#include "fichier.c"
 //mettre toutes les struct dans le fichier main
 //et que des fichiers dans les autres doc (pas de main)
@@ -131,11 +131,6 @@ struct Depart{
 };
 
 //Volume d'eau total (obtenu par la pluie) ajouté au lac
-/*
-struct Volume{
-	double quantite;
-};
-*/
 bool avancerEau(struct Point * point, struct Grille * grilles, struct Depart * depart) {
     // Vérifier si on est au bord
     if (point->x == 592800) return false;
@@ -144,14 +139,7 @@ bool avancerEau(struct Point * point, struct Grille * grilles, struct Depart * d
     if (point->y == 95200) return false;
 
 	int indice = indexing(depart->x, depart->y);
-	//printf("%d, %d\n", depart->x, depart->y);
-	//les coordonnées chgt au début et reste après tjr à 597400, 102800 => indice 208
-	//printf("%d\n", indice);
-	//c'est l'indice de la case de départ (la case où l'eau est tombée)
-	//ça me print tjr le même indice alors que les coord chgt...
-
 	//x=latitude et y=longitude
-	//printf("%f\n", grilles[indice].alt);
     // Chercher le minimum dans un voisinage de 3x3 cases
     double min = 10000;
     int minX = 0;
@@ -169,25 +157,6 @@ bool avancerEau(struct Point * point, struct Grille * grilles, struct Depart * d
                 minY = y;
                 //printf("%d, %d\n", minX, minY);
             }
-            /*
-            if (grilles[i].lac==1){
-				grilles[indice].catch=1;
-				//printf("%d\n",grilles[indice].catch);
-				//printf("%d\n", indice);
-				//ça print tjr "133"... -> ça a été corrigé !
-				//printf("ok");
-				return true;
-			}
-            if (minX == 0 && minY == 0){
-				if (grilles[i].lac==1){
-					grilles[indice].catch=1;
-					//printf("%d\n",grilles->catch);
-					//printf("ok");
-					return true;
-				}
-				return false;
-			}
-			*/
         }
     }
 
@@ -201,20 +170,6 @@ bool avancerEau(struct Point * point, struct Grille * grilles, struct Depart * d
 		}
 		return false;
 	}
-
-    /*
-    if (minX == 0 && minY == 0 && grilles[indexing(point->x, point->y)].lac!=1){
-		return false;
-	}
-	//ajouter la quantité dans qui tombe dans le lac
-	if(grilles[indexing(point->x, point->y)].lac==1){
-		grilles[indice].catch=1;
-		volume->quantite += grilles[indice].pluie;
-		//printf("%d\n",grilles->catch);
-		//printf("ok");
-		return true;
-	}
-	*/
 
     // Avancer le point vers le minimum
     point->x += minX;
@@ -241,56 +196,6 @@ void simulerEau(int x, int y, struct Grille * grilles, struct Depart* depart) {
         //printf("ok");
     }
 }
-
-/*
-double  accumulation (int compteur1,struct Grille *grilles) {
-	//int z=indexing(grilles[compteur1].long,grilles[compteur1].lat)
-	int pos_x=grilles[compteur1].lat;
-	int pos_y=grilles[compteur1].longi;
-	//x=latitude et y=longitude
-	int y_min = 0;
-	int x_min = 0;
-	int h_min=0;
-	while(pos_x!=592800||pos_y!=95200||pos_x!=600000||pos_y != 103800){
-		//printf("ok");
-		//print que 1 ok
-		for (int x= -200; x<=200; x=x+200){
-			for (int y= -200; y<=200; y=y+200){
-				int i=indexing(pos_x+x,pos_y+y);
-				//printf("%f\n",grilles[i].alt);
-				if (h_min > grilles[i].alt){
-					h_min = grilles[i].alt;
-					x_min = grilles[i].lat;
-					y_min = grilles[i].longi;
-					//printf("%d",i);
-					//printf("ok");
-					//ça ne print pas "ok"
-				}
-
-				pos_x = x_min;
-				pos_y = y_min;
-
-				if (grilles[indexing(x_min,y_min)].lac==1){
-					grilles[compteur1].catch=1;
-					//printf("%d\n",grilles[compteur1].catch);
-					//printf("ok");
-					//ne print pas
-				}
-			}
-		}
-		//pos_x = x_min;
-		//pos_y = y_min;
-	}
-	//if (grilles[indexing(x_min,y_min)].lac==1){
-		//grilles[compteur1].catch=1;
-		//printf("%d\n",grilles[compteur1].catch);
-		//printf("ok");
-		//ne print pas et comme si boucle infinie...
-	//}
-	return 1;
-}
-*/
-
 struct Grille grilles[37*44];
 
 int main(int argc, char * argv[]) {
@@ -326,9 +231,6 @@ int main(int argc, char * argv[]) {
 	double * altitudes = malloc(1628*sizeof(double));
 	for(int i=0; i<nbPoints; i++){
 		altitudes[(((int) ymax- (int) points[i].longitude)/200)*37 + (((int) points[i].latitude- (int) xmin)/200)] = points[i].altitude;
-		//printf("%f\n", points[i].altitude);
-		//printf("%d\n", (((int) ymax- (int) points[i].longitude)/200)*37 + (((int) points[i].latitude- (int) xmin)/200));
-		//printf("%d\n", indexing(points[i].latitude, points[i].longitude));
 	}
 
 	//writeCsv("altitudes.csv", altitudes, 37, 44);
@@ -337,26 +239,15 @@ int main(int argc, char * argv[]) {
 	//Imprimer les valeurs des altitudes se trouvant dans le malloc
 
 	//printf("%d\n", nbPoints);
-	for(int i=0; i<nbPoints; i++){
+	//for(int i=0; i<nbPoints; i++){
 		//printf("%f\n", altitudes[i]);
-	}
+	//}
 
 
 	//int lenxp=37;
 	//int lenyp=44;
-	//int total=lenxp*lenyp;
-	//double quantite=0;
-	//struct Grille grilles[total];
-	//for (int l=0;l<total;l++){
 	initialisation(altitudes,1628,1,598000,596200,98000,103200,grilles);
 	//latitude = x et longitude = y
-
-	//Simuler 1 goutte
-	//simulerEau(592800, 100000, grilles);
-	/*
-	struct Volume volume;
-	volume.quantite = 0;
-	*/
 	// Simuler beaucoup de gouttes
 
     for (int y = 103800; y >= 95200; y=y-200) {
@@ -373,45 +264,20 @@ int main(int argc, char * argv[]) {
 	int * eau = malloc(1628*sizeof(int));
 	for(int i=0; i<nbPoints; i++){
 		eau[i] = grilles[i].catch;
-		//printf("%f\n", points[i].altitude);
-		//printf("%d\n", (((int) ymax- (int) points[i].longitude)/200)*37 + (((int) points[i].latitude- (int) xmin)/200));
-		//printf("%d\n", indexing(points[i].latitude, points[i].longitude));
 	}
 	writeCsv("eau.csv", eau, 37, 44);
 	int salut=0;
 	for (int i=0;i<1628;i++){
 		if (grilles[i].catch==1){
-			salut+=1;
+			salut+=grilles[i].pluie;
 		}
 	}
-	printf("%d",salut);
+	printf("%d\n",salut);
 	int * lac = malloc(1628*sizeof(int));
 	for(int i=0; i<nbPoints; i++){
 		lac[i] = grilles[i].lac;
-		//printf("%f\n", points[i].altitude);
-		//printf("%d\n", (((int) ymax- (int) points[i].longitude)/200)*37 + (((int) points[i].latitude- (int) xmin)/200));
-		//printf("%d\n", indexing(points[i].latitude, points[i].longitude));
 	}
 	writeCsv("lac.csv", lac, 37, 44);
-
-	/*
-	for(int m=0;m<1628;m++){
-		//printf("ok");
-		//ça print que 2 ok...
-		//accumulation(m,grilles);
-		//printf("ok");
-		//ça print que 1 ok
-		if (grilles[m].catch==1){
-			quantite=quantite+grilles[m].pluie;
-			printf("%f",quantite);
-			//printf("ok");
-			//ne print pas
-		}
-	}
-	*/
-
-	//double volume_tot=(volume.quantite/1000)*200;
-	//printf("Le volume totale d'eau est: %f",volume_tot);
 
 	free(altitudes);
 	free(eau);
